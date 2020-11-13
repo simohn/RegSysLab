@@ -9,7 +9,6 @@
 clear all
 clc
 
-
 % Soll-Trajektorie:
 parReg.traj_fKreis     = 0.05;
 parReg.traj_fz         = 2;
@@ -22,7 +21,7 @@ parReg.traj_s0         = 0.5;
 parSys.m1   = 20;
 parSys.m2   = 20;
 parSys.m3   = 20;
-parSys.mL   = 20;
+parSys.mL   = 30;
 parSys.l1   = 1;
 parSys.l2   = 1;
 parSys.l3   = 1;
@@ -58,12 +57,38 @@ parReg.parSys.mL = 20; % nominelle Lastmasse
 % PD-Regler:
 parReg.PD.Ts  = 0.005;
 
+kp1 = 17000;
+kp2 = 17000;
+kp3 = 22000;
+parReg.PD.Kp = [kp1,0,0;0,kp2,0;0,0,kp3];
+
+kd1 = 2200;
+kd2 = 2200;
+kd3 = 1800;
+parReg.PD.Kd = [kd1,0,0;0,kd2,0;0,0,kd3];
+
 % Computed-Torque-Regler:
 % Pole Fehlersystem bei (s+10)^2 = s^2 + 20s + 100
 parReg.CT.Ts  = 0.005;
 
+k01 = 100;
+k02 = 100;
+k03 = 100;
+parReg.CT.K0 = [k01,0,0;0,k02,0;0,0,k03];
+
+k11 = 20;
+k12 = 20;
+k13 = 20;
+parReg.CT.K1 = [k11,0,0;0,k12,0;0,0,k13];
+
 % Computed-Torque-Regler mit Adaptionsregelgesetz:
 parReg.CTA.Ts  = 0.001;
+
+A = [zeros(3,3) eye(3); -parReg.CT.K0 -parReg.CT.K1];
+Q = eye(6);
+parReg.CTA.P = lyap(A',Q);
+parReg.CTA.B = [zeros(3,3);eye(3)];
+parReg.CTA.Gamma = 0.00017;
 
 % Sollwertfilter:
 parReg.nennerpolynom = conv(conv([1/100 1],[1/100 1]),[1/100 1]);
