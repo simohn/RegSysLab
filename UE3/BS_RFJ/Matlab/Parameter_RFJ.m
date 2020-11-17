@@ -26,7 +26,8 @@ par_imp.d = 10e-3;              %Nms/rad - par_imp(1);
 par_imp.M_max = 0.2;            %Nm - par_imp(2);
 par_imp.c = 0.7;                %Nm/rad - par_imp(3); 
 
-% par_reg.k0 = ...
-% par_reg.k1 = ...
-% par_reg.gamma1 = ...
+par_reg.k0 = 100;
+par_reg.k1 = 30;
+par_reg.gamma1 = 10^10;
+par_reg.Ta = 0.001;
 
