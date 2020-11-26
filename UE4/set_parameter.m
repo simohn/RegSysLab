@@ -45,3 +45,30 @@ parSys.qZ1max = 4.5e-3/60;        % Maximaler Zufluss Z1
 parSys.qZ3max = 4.5e-3/60;        % Maximaler Zufluss Z3
 parSys.qZ1min = 0;                % Minimaler Zufluss Z1
 parSys.qZ3min = 0;                % Minimaler Zufluss Z3
+
+% Sollwertfilter
+s = tf('s');
+
+p = -100;
+a = poly(p*ones(1,3));
+
+a0 = a(4);
+a1 = a(3);
+a2 = a(2);
+
+A = [0,1,0;0,0,1;-a0,-a1,-a2];
+B = [0;0;1];
+C = [a0,0,0;0,1,0;0,0,1];
+D = [0];
+
+Gsys = ss(A,B,C,D);
+
+Ts = parSys.Ta;
+Gdsys = c2d(Gsys,Ts);
+
+parSollFilt.A = Gdsys.A;
+parSollFilt.B = Gdsys.B;
+parSollFilt.C = Gdsys.C;
+parSollFilt.D = Gdsys.D;
+
+parSollFilt.yd0 = 0;
