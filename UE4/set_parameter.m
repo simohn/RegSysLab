@@ -36,9 +36,9 @@ parSys.hmax      = 0.55;          % Maximale Fuellhoehe
 parSys.Ta = 0.2;                
 
 % Anfangsbedingung
-parSys.h1_0 = 0.30;
-parSys.h2_0 = 0.10;
-parSys.h3_0 = 0.05;
+parSys.h1_0 = 0.1801527441e0;
+parSys.h2_0 = 0.1;
+parSys.h3_0 = 0.0;
 
 % Maximale Zufluesse
 parSys.qZ1max = 4.5e-3/60;        % Maximaler Zufluss Z1
@@ -49,16 +49,16 @@ parSys.qZ3min = 0;                % Minimaler Zufluss Z3
 % Sollwertfilter
 s = tf('s');
 
-p = -100;
-a = poly(p*ones(1,3));
+a = -0.1;
+a = poly(a*ones(1,3));
 
 a0 = a(4);
 a1 = a(3);
 a2 = a(2);
 
 A = [0,1,0;0,0,1;-a0,-a1,-a2];
-B = [0;0;1];
-C = [a0,0,0;0,1,0;0,0,1];
+B = [0;0;a0];
+C = [1,0,0;0,1,0;0,0,1];
 D = [0];
 
 Gsys = ss(A,B,C,D);
@@ -66,9 +66,19 @@ Gsys = ss(A,B,C,D);
 Ts = parSys.Ta;
 Gdsys = c2d(Gsys,Ts);
 
+% Parameter des Sollwertfilters
 parSollFilt.A = Gdsys.A;
 parSollFilt.B = Gdsys.B;
 parSollFilt.C = Gdsys.C;
 parSollFilt.D = Gdsys.D;
 
-parSollFilt.yd0 = 0;
+parSollFilt.yd0 = parSys.h2_0;
+
+% Parameters des Reglers
+parReg.delta_h_min = 0.001;
+
+pReg = -0.1;
+aReg = poly(ones(2,1)*pReg);
+
+parReg.a0 = aReg(3);
+parReg.a1 = aReg(2);

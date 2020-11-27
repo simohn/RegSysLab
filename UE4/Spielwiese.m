@@ -21,3 +21,4 @@ Ts = 0.001;
 Gdsys = c2d(Gsys,Ts);
 
 step(Gdsys)
+
