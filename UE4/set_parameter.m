@@ -49,7 +49,9 @@ parSys.qZ3min = 0;                % Minimaler Zufluss Z3
 % Sollwertfilter
 s = tf('s');
 
-a = -0.1;
+% Pole weit links bedeutet bessere Annäherung (schneller) an den
+% Eingangsverlauf
+a = -0.06;
 a = poly(a*ones(1,3));
 
 a0 = a(4);
@@ -61,23 +63,25 @@ B = [0;0;a0];
 C = [1,0,0;0,1,0;0,0,1];
 D = [0];
 
-Gsys = ss(A,B,C,D);
+sys = ss(A,B,C,D);
 
 Ts = parSys.Ta;
-Gdsys = c2d(Gsys,Ts);
+sysd = c2d(sys,Ts,'zoh');
 
 % Parameter des Sollwertfilters
-parSollFilt.A = Gdsys.A;
-parSollFilt.B = Gdsys.B;
-parSollFilt.C = Gdsys.C;
-parSollFilt.D = Gdsys.D;
+parSollFilt.A = sysd.A;
+parSollFilt.B = sysd.B;
+parSollFilt.C = sysd.C;
+parSollFilt.D = sysd.D;
 
 parSollFilt.yd0 = parSys.h2_0;
 
 % Parameters des Reglers
 parReg.delta_h_min = 0.001;
 
-pReg = -0.1;
+% Pole sehr weit links bedeutet schnelleres abklingen der Fehlerdynamik
+% Sehr weit links führt zu starkem Ripple
+pReg = -1;
 aReg = poly(ones(2,1)*pReg);
 
 parReg.a0 = aReg(3);
