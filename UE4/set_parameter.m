@@ -51,7 +51,8 @@ s = tf('s');
 
 % Pole weit links bedeutet bessere Annäherung (schneller) an den
 % Eingangsverlauf
-a = -0.06;
+% a = -0.06; % ohne Stellgrößenbeschränkung
+a = -0.02;
 a = poly(a*ones(1,3));
 
 a0 = a(4);
@@ -81,7 +82,8 @@ parReg.delta_h_min = 0.001;
 
 % Pole sehr weit links bedeutet schnelleres abklingen der Fehlerdynamik
 % Sehr weit links führt zu starkem Ripple
-pReg = -1;
+% pReg = -1; % Ohne Stellgrößenbeschränkung
+pReg = -4;
 aReg = poly(ones(2,1)*pReg);
 
 parReg.a0 = aReg(3);
