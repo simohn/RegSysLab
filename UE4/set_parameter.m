@@ -46,13 +46,16 @@ parSys.qZ3max = 4.5e-3/60;        % Maximaler Zufluss Z3
 parSys.qZ1min = 0;                % Minimaler Zufluss Z1
 parSys.qZ3min = 0;                % Minimaler Zufluss Z3
 
-% Sollwertfilter
+% Minimale Zuflüsse (Ermittlung min mittlere Änderungsrate)
+parSys.qZ1min = 0.1e-3/60;
+
+% ========== Sollwertfilter =========
 s = tf('s');
 
 % Pole weit links bedeutet bessere Annäherung (schneller) an den
 % Eingangsverlauf
 % a = -0.06; % ohne Stellgrößenbeschränkung
-a = -0.02;
+a = -0.023; % mit Stellgrößenbeschränkung (Aufgabe 4.6)
 a = poly(a*ones(1,3));
 
 a0 = a(4);
@@ -77,7 +80,7 @@ parSollFilt.D = sysd.D;
 
 parSollFilt.yd0 = parSys.h2_0;
 
-% Parameters des Reglers
+% =========== Reglers =============
 parReg.delta_h_min = 0.001;
 
 % Pole sehr weit links bedeutet schnelleres abklingen der Fehlerdynamik
@@ -88,3 +91,35 @@ aReg = poly(ones(2,1)*pReg);
 
 parReg.a0 = aReg(3);
 parReg.a1 = aReg(2);
+
+% ========= Ratelimiter =========
+% parRateLim.dhp = 0.594874e-3; % 0..0.2
+parRateLim.delta_h_pos = 0.689317e-3; % bessere Approximation der Steigung
+parRateLim.delta_h_neg = -2.396e-3;
+
+% Sollwertfilter
+
+a = -0.0318;
+a = poly(a*ones(1,3));
+
+a0 = a(4);
+a1 = a(3);
+a2 = a(2);
+
+A = [0,1,0;0,0,1;-a0,-a1,-a2];
+B = [0;0;a0];
+C = [1,0,0;0,1,0;0,0,1];
+D = [0];
+
+sys = ss(A,B,C,D);
+
+Ts = parSys.Ta;
+sysd = c2d(sys,Ts,'zoh');
+
+% Parameter des Sollwertfilters
+parSollFilt_1.A = sysd.A;
+parSollFilt_1.B = sysd.B;
+parSollFilt_1.C = sysd.C;
+parSollFilt_1.D = sysd.D;
+
+parSollFilt_1.yd0 = parSys.h2_0;

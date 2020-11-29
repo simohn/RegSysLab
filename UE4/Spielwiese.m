@@ -22,3 +22,10 @@ Gdsys = c2d(Gsys,Ts);
 
 step(Gdsys)
 
+%%
+
+clc
+t = simout_h.Time(:,1);
+h1 = simout_h.Data(:,1);
+h2 = simout_h.Data(:,1);
+h3 = simout_h.Data(:,1);
