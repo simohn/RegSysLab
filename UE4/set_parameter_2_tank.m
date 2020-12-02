@@ -54,8 +54,8 @@ s = tf('s');
 
 % Pole weit links bedeutet bessere Annäherung (schneller) an den
 % Eingangsverlauf
-a = -0.05; % ohne Stellgrößenbeschränkung
-% a = -0.023; % mit Stellgrößenbeschränkung (Aufgabe 4.6)
+%a = -0.02; % ohne Stellgrößenbeschränkung
+a = -0.023; % mit Stellgrößenbeschränkung (Aufgabe 4.6)
 a = poly(a*ones(1,3));
 
 a0 = a(4);
@@ -85,8 +85,8 @@ parReg.delta_h_min = 0.001;
 
 % Pole sehr weit links bedeutet schnelleres abklingen der Fehlerdynamik
 % Sehr weit links führt zu starkem Ripple
-pReg = 0; % Ohne Stellgrößenbeschränkung
-% pReg = -4;
+% pReg = 0; % Ohne Stellgrößenbeschränkung
+pReg = -0.05;
 aReg = poly(ones(2,1)*pReg);
 
 parReg.a0 = aReg(3);
@@ -94,12 +94,12 @@ parReg.a1 = aReg(2);
 
 % ========= Ratelimiter =========
 % parRateLim.dhp = 0.594874e-3; % 0..0.2
-parRateLim.delta_h_pos = 0.689317e-3; % bessere Approximation der Steigung
-parRateLim.delta_h_neg = -2.396e-3;
+parRateLim.delta_h_pos = 0.58e-3%0.689317e-3; % bessere Approximation der Steigung
+parRateLim.delta_h_neg = -1e-3%-2.396e-3;
 
 % Sollwertfilter
 
-a = -0.0318;
+a = -0.08;
 a = poly(a*ones(1,3));
 
 a0 = a(4);
