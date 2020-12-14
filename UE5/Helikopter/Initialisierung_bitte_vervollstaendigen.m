@@ -41,14 +41,15 @@ fbvsPar.q2d = [-atan(sysPar.a2/sysPar.a1),0,0];
 
 %% Setzen der Reglerparameter - Bitte anpassen!
 
-p1 = -1;
-p2 = -1;
+p1 = -0.7;
+p2 = -0.7;
 
 k1I = -p1 ^ 5;
 k10 = 5 * p1 ^ 4;
 k13 = 10 * p1 ^ 2;
 k12 = -10 * p1 ^ 3;
 k11 = -5 * p1;
+
 k2I = -p2 ^ 3;
 k20 = 3 * p2 ^ 2;
 k21 = -3 * p2;
